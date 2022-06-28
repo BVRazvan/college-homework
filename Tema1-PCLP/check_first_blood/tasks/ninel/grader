@@ -1,0 +1,82 @@
+#!/usr/bin/python3
+# Copyright 2019 Darius Neatu (neatudarius@gmail.com)
+
+import inspect
+import pathlib
+import os
+import sys
+
+current_dir = os.path.dirname(os.path.abspath(
+    inspect.getfile(inspect.currentframe())))
+root_dir = pathlib.Path(current_dir).parent.parent
+sys.path.insert(0, str(root_dir))
+
+from check_utils.grader import Grader
+
+
+class NinelGrader(Grader):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    def grade_test(self):
+        input, output, ref = self.read()
+
+        # for this task, partial grading is enabled
+        # stop at first error
+        points_per_subtask = 0.25 * self.max_points
+
+        # check sum
+        try:
+            out_sum, ref_sum = int(output[0]), int(ref[0])
+        except:
+            self.exit(code=-1, err='sum is missing or is not an integer')
+        else:
+            if out_sum == ref_sum:
+                self.add_points(points_per_subtask)
+            else:
+                self.exit(
+                    code=-1, err='sum - {} vs {}'.format(out_sum, ref_sum))
+
+        # check m_a
+        try:
+            out_ma, ref_ma = float(output[1]), float(ref[1])
+        except:
+            self.exit(
+                code=-2, err='m_a is missing or is not a floating point number')
+        else:
+            if abs(out_ma - ref_ma) < 0.0000001:
+                self.add_points(points_per_subtask)
+            else:
+                self.exit(
+                    code=-2, err='m_a - {} vs {}'.format(out_ma, ref_ma))
+
+        # check xmax_impar
+        try:
+            out_maximpar, ref_maximpar = int(output[2]), int(ref[2])
+        except:
+            self.exit(
+                code=-3, err='xmax_impar is missing or is not an integer')
+        else:
+            if out_maximpar == ref_maximpar:
+                self.add_points(points_per_subtask)
+            else:
+                self.exit(code=-3,
+                          err='xmax_impar - {} vs {}'.format(out_maximpar, ref_maximpar))
+
+        # check xmin_par
+        try:
+            out_minpar, ref_minpar = int(output[3]), int(ref[3])
+        except:
+            self.exit(
+                code=-4, err='xmin_par is missing or is not an integer')
+        else:
+            if out_minpar == ref_minpar:
+                self.add_points(points_per_subtask)
+            else:
+                self.exit(code=-4,
+                          err='xmin_par - {} vs {}'.format(out_minpar, ref_minpar))
+
+
+if __name__ == '__main__':
+    assert len(sys.argv) == 5, sys.argv
+    NinelGrader(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4]).run()
