@@ -1,0 +1,11 @@
+LOAD input/b.pgm
+SELECT 0 0 4 4
+CROP
+SAVE ioana1 ascii
+APPLY GAUSSIAN_BLUR
+SAVE ioana2 ascii
+APPLY BLUR
+SAVE ioana3 ascii
+APPLY SHARPEN
+SAVE ioana4 ascii
+EXIT
