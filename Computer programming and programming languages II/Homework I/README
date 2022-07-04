@@ -1,0 +1,116 @@
+// Copyright Bogdan Valentin-Razvan 311CA <bogdanvrazvan@gmail.com> 2021-2022
+
+	Dupa cum specifica si enuntul temei, totul consta in jocul cu memorie. O sa
+incerc sa vorbesc despre fiecare operatie separat, dar unele (insert si
+insert_at) au multe lucruri in comun.
+_______________________________________________________________________________
+
+	--- INSERT ---
+
+	*(In cod am folosit define-uri pentru sizeof(unsigned char) (U_C) si
+sizeof(unsigned int) (U_I) pentru lizibilitate)*
+
+	Din citire, am creat acea structura cu campurile respective; partea mai
+interesanta a fost cand a trebuit sa pun octetii de la tipuri diferite de 
+date unii langa altii.
+	Prin urmare, in void *data al structurii am pus octetii in modul urmator:
+  _ _ _ _ _ _ _ ......... _ _ _ _ _ _ _ _ _ _ _ _ _ _ ............ _ _ _ _ _ 
+ |[strlen(primul cuvant) + 1] octeti| |sizeof(int8_t/int16_t/int32_t) octeti|
+
+in continuare:
+  _ _ _ _ _ _ _ _.... _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ ......._ _ _ _ _ _
+ |sizeof(int8_t/int16_t/int32_t) octeti||[strlen(al doilea cuvant) + 1] octeti|
+
+*(Am incercat sa reprezint cate un octet cu '_')*
+
+	Treptat, odata cu alocarea, am si copiat octetii de la datele citite.
+Desigur, in campurile head->type si head->len am pastrat tipul structurii,
+respectiv numarul de octeti alocati si folositi din void *data.
+
+	Dupa ce am copiat datele in structura, urmeaza adaugarea lor in vectorul
+generic *arr, iar eu am conceput lucrurile in felul urmator: voi copia
+fiecare camp din structura individual(ordinea are importanta):
+	1. aloc sizeof(unsigned char) pentru tipul structurii (acel unsigned char)
+	2. aloc sizeof(unsigned int) octeti pentru lungimea(in octeti) a
+combinatiei char* + int8_t/int16_t/int32_t + int8_t/int16_t/int32_t + char* pe
+care am explicat-o mai sus. Acest numar joaca un rol deoarece ma ajuta la
+parcurgerea prin vectorul generic(o sa detaliez mai jos parcurgerea).
+	3. aloc head->len octeti pentru a copia efectiv combinatia char* +
++ int8_t/int16_t/int32_t + int8_t/int16_t/int32_t + char*.
+
+	Parcurgerea este, intrucat avem un vector generic, mai dificila si depinde
+in totalitate de modul in care am "impartit" octetii alocati.
+	*(Voi inlocui acele sizeof-uri cu valori efective pentru a fi mai usor
+de inteles)*
+	Sa zicem ca sunt la adresa arr:
+	arr -> [0] [1 _ _ 4] [5 _  .... _ 5<->5 + valoarea de la octetii {1<->4} - 1] [5<->5 + valoarea de la octetii {1<->4}] ......
+	-octetul {0} imi arata tipul structurii;
+	-octetii {1<->4} imi arata lungimea combinatiei char* + int8_t/int16_t/int32_t +
++ int8_t/int16_t/int32_t + char*
+	-octetii {5<->5 + valoarea de la octetii {1<->4} - 1} imi arata combinatia
+char* + int8_t/int16_t/int32_t + int8_t/int16_t/int32_t + char*.
+
+	Avand aceste date, eu stiu unde se delimiteaza fiecare "parte" a fiecarei
+structuri si evident fiecare structura.
+	De exemplu pentru a ajunge la inceputul structurii x trebuie:
+	pos = 0;
+	for (int i = 1; i < x - 1; ++i) // de x - 1 ori
+		++pos // ajung la acel octet 1 care e inceputul lungimii combinatiei
+		pos += 4 + *((unsigned int*)arr + pos)) // *(arr + pos) imi da lungimea
+												// combinatiei, iar 4 este
+												// nr. de octeti ai numarului
+
+	Avand toate acestea, pot ajunge la finalul vectorului generic si adaug
+in ordinea de mai sus 1. , 2. , 3. "partile" structurii.
+
+_______________________________________________________________________________
+
+	--- INSERT_AT ---
+
+	*(In cod am folosit define-uri pentru sizeof(unsigned char) (U_C) si
+sizeof(unsigned int) (U_I) pentru lizibilitate)*
+
+	In mare parte este acelasi lucru cu functia insert; singura diferenta
+este ca a trebuit sa shiftez la dreapta cu [sizeof(unsigned char) +
+sizeof(unsigned int) + lungimea combinatiei] toti octetii de la inceputul
+pozitiei unde vreau sa adaug noii octeti. Am folosit functia memmove, alaturi
+de un vector auxiliar, pentru copiere deoarece este mai sigura, avand ceva
+dificultati cand intervalele se intersectau. Aritmetica pe pointeri pare
+dezorganizata, dar n-am avut ce face.
+
+_______________________________________________________________________________
+
+
+	--- FIND ---
+
+	Am parcurs vectorul pana la structura respectiva(daca exista)
+ si am afisat "partile" structurii, conform "impartirii" mele.
+
+_______________________________________________________________________________
+ 
+		
+	--- DELETE_AT ---
+
+	In mare parte este operatia inversa a functiei INSERT_AT, dar aici am
+shiftat la stanga, de la inceputul structurii urmatoare(daca exista) cu
+sizeof(unsigned char) + sizeof(unsigned int) + lungimea combinatiei].
+Am folosit functia memmove, alaturi de un vector auxiliar, pentru copiere
+deoarece este mai sigura, avand ceva dificultati cand intervalele se
+intersectau. Aritmetica pe pointeri pare dezorganizata, dar n-am avut ce face.
+
+_______________________________________________________________________________
+
+
+	--- PRINT ---
+
+	Am parcurs vectorul generic si am afisat dupa tiparul impus.
+
+
+_______________________________________________________________________________
+
+
+
+	
+
+						
+
