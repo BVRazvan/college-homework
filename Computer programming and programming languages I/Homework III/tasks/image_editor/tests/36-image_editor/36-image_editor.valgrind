@@ -1,0 +1,15 @@
+==21080== Memcheck, a memory error detector
+==21080== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==21080== Using Valgrind-3.15.0 and LibVEX; rerun with -h for copyright info
+==21080== Command: /home/student/Teme/Tema3-PCLP/image_editor
+==21080== Parent PID: 21079
+==21080== 
+==21080== 
+==21080== HEAP SUMMARY:
+==21080==     in use at exit: 0 bytes in 0 blocks
+==21080==   total heap usage: 16,420 allocs, 16,420 frees, 313,573,629 bytes allocated
+==21080== 
+==21080== All heap blocks were freed -- no leaks are possible
+==21080== 
+==21080== For lists of detected and suppressed errors, rerun with: -s
+==21080== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)

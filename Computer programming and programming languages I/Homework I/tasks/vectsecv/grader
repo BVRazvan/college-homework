@@ -1,0 +1,56 @@
+#!/usr/bin/python3
+# Copyright 2019 Darius Neatu (neatudarius@gmail.com)
+
+import inspect
+import pathlib
+import os
+import sys
+
+current_dir = os.path.dirname(os.path.abspath(
+    inspect.getfile(inspect.currentframe())))
+root_dir = pathlib.Path(current_dir).parent.parent
+sys.path.insert(0, str(root_dir))
+
+from check_utils.grader import Grader
+
+
+class VectSecvGrader(Grader):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    def grade_test(self):
+        input, output, ref = self.read()
+
+        # compare k
+        try:
+            out_k, ref_k = int(output[0]), int(ref[0])
+        except:
+            self.exit(code=-1, err='k is missing or is not an integer')
+        else:
+            if out_k == ref_k:
+                pass  # no partial points
+            else:
+                self.exit(code=-1, err='k: {} vs {}'.format(out_k, ref_k))
+
+        # compare ps
+        try:
+            out_ps, ref_ps = [int(x) for x in output[1].split()], [
+                int(x) for x in ref[1].split()],
+        except:
+            self.exit(code=-2, err='ps is missing or is not an array of integers')
+        else:
+            out_m, ref_m = len(out_ps), len(ref_ps)
+            if out_m != ref_m:
+                self.exit(code=-2, err='m: {} vs {}'.format(out_m, ref_m))
+
+            for i, p in enumerate(ref_ps):
+                if out_ps[i] != p:
+                    self.exit(code=-2,
+                              err='p[{}]: {} vs {}'.format(i, out_ps[i], p))
+
+            self.add_points(self.max_points)
+
+
+if __name__ == '__main__':
+    assert len(sys.argv) == 5, sys.argv
+    VectSecvGrader(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4]).run()

@@ -1,0 +1,68 @@
+Copyright Bogdan Valentin-Razvan 311CA
+
+Problema 1 - On the fly analysis (ninel)
+
+Observatie cheie: trebuie sa retinem cate 3 elemente de pe pozitii consecutive.
+Fiind pe pozitia i, retin in "last" si "before_last" elementele
+de pe pozitia i - 1 si i - 2. Daca elementele exista in sir (i - 2 >= 0)
+atunci verific daca elementul de pe pozitia i - 1 este "special".
+Cand gasesc un element "special", il adaug la suma, incrementez numarul
+de valori "speciale" si il compar cu maximul/minimul in functie de
+paritatea pozitiei. De mentionat ca la afisare trebuie avuta atentie
+cand nu se gasesc valori "speciale" deoarece la media aritmetica nu se 
+poate face impartirea la 0.
+
+Complexitate de timp : O(N)
+Complexitate de memorie : O(1)
+
+
+Problema 2 - Proprietati ale numerelor naturale (vectsecv)
+
+Aplic procedeul descris, incepand cu valoarea citita de la tastatura:
+construiesc din numarul actual alte doua valori, unul cu cifrele ordonate
+descrescator si celalalt cu cifrele ordonate crescator. Numarul rezultat
+din diferenta celor doua valori contruite il adaug intr-un vector, iar 
+daca se mai gaseste in acest vector, inseamna avem o perioada, iar
+procedeul se termina, altfel repetam procedeul cu numarul format din
+diferenta. La terminarea procedeului, tinem minte pozitia in care
+regasim elementul actual, reprezentand primul indice din perioada, iar 
+cele anterioare fiind diferentele anterioare perioadei.
+
+Complexitate de timp : O(K^2 + K*logN)
+Complexitate de memorie : O(K)
+
+
+Problema 3 - Perfectionarea punctajelor (codeinvim)
+
+Aplic un algoritm de tip greedy. Pentru fiecare materie cu nota diferita de 10
+adaug intr-un vector punctajul care se mai poate obtine. Sortez punctajele
+din vectorul creat in ordine descrescatoare deoarece cel mai optim 
+este de a lua nota 10 la o materie care iti aduce in plus cele mai multe puncte
+(bubble sort). Atata timp cat punctajul actual este mai mic decat cel dorit,
+parcurg vectorul sortat si cresc punctajul actual. Odata atins sau depasit
+punctajul minim opresc parcurgerea. Daca se termina parcurgerea vectorului, iar
+punctajul nu este atins, afisez "-1", altfel afisez indicele actual
+reprezentand cate materii ar trebui sa mai aiba cu nota 10.
+
+Complexitate de timp : O(N^2)
+Complexitate de memorie : O(N)
+
+
+Problema 4 - Nonogram checker (nomogram)
+
+Citirea datelor de intrare este destul de complicata, in vectorii
+"restrictions" citesc numarul de grupuri de pe linia i, respectiv coloana j,
+iar in vectorii "limits" retin dimensiunea grupului j de pe linia i si
+dimensiunea grupului i de pe coloana j; unde 0 <= i < n si 0 <= j < m.
+Algoritmul consta doar in verificarea acestor "reguli" primite ca date de
+intrare, pe linii si pe coloane. Incep parcurgerea matricii, iar odata gasita
+o valoare de "1" inseamna ca avem un nou grup colorat si ne extindem in
+directia corespunzatoare (la coloana j + 1 pentru linii sau linia i + 1 pentru
+coloane) pana la urmatoarea valoare de 0 sau la marginea matricei pentru a afla
+dimensiunea noului grup. Daca exista vreun grup care nu are dimensiunea ceruta
+sau numarul de grupuri gasite pe linia i sau coloana j difera de cel primit la
+datele de intrare atunci matricea nu respecta conditiile.
+
+Complexitate de timp : O(N*M)
+Complexitate de memorie : O(N*M)
+
