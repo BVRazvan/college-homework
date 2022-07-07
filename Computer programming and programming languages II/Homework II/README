@@ -1,0 +1,95 @@
+Copyright Bogdan Valentin-Razvan 311CA 2021-2022 <bogdanvrazvan@gmail.com>
+
+	O sa incerc sa vorbesc despre fiecare task/subtask in parte.
+
+-------------------------------------------------------------------------------
+
+Task 1 - Simple Cipher
+
+	Initial am copiat string-ul initial in string-ul final (partea cu label-ul
+copy). Dupa aceea, am aflat restul impartirii numarului la 26, care reprezinta
+shiftarea de pozitii (partea cu label-ul modulo_26), prin scaderi repetate.
+In continuare, apar doua cazuri: cand shiftarea presupune depasirea literei 'Z'
+si trebuie inceput din nou numaratoarea de la 'A' si cazul cel simplu cand nu
+se trece de litera 'Z', de mentionat ca am folosit valorii numerice ale
+literelor din tabelul ASCII (A = 65, Z = 90).
+
+-------------------------------------------------------------------------------
+
+Task 2 - Points
+
+a) Points Distance
+
+	Distanta dintre doua puncte este |x1 - x2| + |y1 - y2|. Prima oara am
+calculat |x1 - x2| (label phase_1), pentru calcularea modulului am folosit
+label-ul abs_value1/2, iar la |y1 - y2| am facut aceeasi chestie
+
+	
+b) Road
+	
+	Acest subtask reprezinta o generalizare a celui de mai sus, in ideea in
+care am folosit aceeasi metoda, singura bataie de cap a fost gasirea modului
+de adresare corect. Suma diferentelor am pastrat-o in registul DX, dar uneori
+am avut probleme cu cei 2 octeti din "partea superioara" a registrului EDX si
+am folosit instructiunile ror si shr pentru a seta cei 2 octeti superiori din
+EDX la 0.
+
+c) Is square
+
+	Acest task consta in verificarea proprietatii de patrat perfect a
+distantelor calculate anterior. M-am folosit de proprietatea ca:
+1 + 3 + 5 + ... + + 2n - 3 + 2n - 1 = n^2. Prin urmare, am scazut din fiecare
+numar un contor care are initial valoarea 1 si creste din 2 in 2 pana cand
+valorea initiala devine <= 0. Daca numarul este 0 insemna ca este patrat
+perfect. Contorul il reprezinta registul EDX
+
+-------------------------------------------------------------------------------
+
+Task 3 - Beaufort Encryption
+
+	La acest task, am evitat folosirea tabulei recta, pentru a salva un
+registru care pot sa-l folosesc cu alte scopuri. Corelarea dintre linie si
+coloana este urmatoare: se poate observa ca, daca scadem din caracterul din
+cheie caracterul respectiv din string-ul initial si adunam 1, se obtine
+al catelea element din alfabet corespunde. Trebuie avuta grija cand diferenta
+este negativa, in acest caz trebuie adaugat 26 la diferenta (26 = numarul de
+litere din alfabet).
+	Pentru parcurgerea string-ului initial am folosit variabila globala
+"i", iar pentru cheie "j", de asemenea am pastrat alte doua variabile pentru
+a pastra lungimile string-urilor cu scopul de a folosi acele registre si in
+alte parti. La fiecare iteratie trebuie verific daca am ajuns la finalul cheii,
+pentru a reseta indicele j si de asemenea verific daca am ajuns la finalul
+string-ului de criptat.
+
+-------------------------------------------------------------------------------
+
+Task 4 - Spiral Encryption
+
+	Task-ul acesta m-a facut sa realizez cat de zgarcit poate fi
+assembly-ul (cand vine vorba de registre), zici ca e roman :) .
+	Revenind, o sa prezint initial generala: pentru a parcurge in spirala,
+ma plimb prin matrice, incepand de la pozitia (0,0) si merg spre dreapta pana
+cand ies din matrice sau intalnesc o pozitie din matrice in care am mai fost,
+cand apare unul dintre cele doua cazuri, ma rotesc la 90 de grade si repet
+algoritmul; pentru a verifica primul caz (iesirea din matrice) verific dupa
+fiecare pas daca ma aflu in intervalul 0 <= i < N si 0 <= j < N, iar pentru
+al doilea caz am creat un vector unidimensional de aparitii care are N * N
+elemente la care am atasat functia i * N + j, care este bijectiva pentru a 
+evita coliziunile(pe scurt functia imi spune pozitia elementului daca liniile
+ar fi puse una dupa alta). Pentru parcurgerea in cele patru directii
+{est, sud, vest, nord} (in aceasta ordine) folosesc vectorii dx si dy.
+	Acum o sa discut putin codul. Din capul locului vreau sa mentionez ca
+am avut o groaza de bug-uri si a trebuit sa golesc cei 3 octeti superiori din
+indicii i si j, care i-am pastrat in esi = i, edi = j. Stiu ca nu este tocmai
+estetic, dar n-am avut incotro.
+	In prima faza am pus parametrii in variabile globale pentru a folosi
+registrele si cu alte scopuri. Dupa aceea intru direct in bucla; fiind la o
+pozitie valida, scriu in string-ul criptat la pozitia curenta si verific daca
+am parcurs toata matricea in spirala (N * N pasi); variabila
+globala "type" este contorul in vectorul de directie care ma ajuta sa avansez
+in matrice. In continuarea, verific daca pozitia este valida, daca nu ma intorc
+la ultima pozitie si ma intorc la 90 de grade, avansez si repet algoritmul.
+
+-------------------------------------------------------------------------------
+	
+	
