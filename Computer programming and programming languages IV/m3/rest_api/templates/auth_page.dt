@@ -1,0 +1,37 @@
+- void css(string file)
+    link(rel= 'stylesheet', type='text/css', href='styles/#{file}.css')
+
+doctype html
+html
+    head
+        <link rel="shortcut icon" href="#">
+        title auth
+        - css("button");
+
+    body
+
+        <div>
+            <a href="http://localhost:8080/files">
+                <button class="cybr-btn">
+                |   FILES<span aria-hidden>_</span>
+                |   <span aria-hidden class="cybr-btn__glitch">FILES</span>
+                |   <span aria-hidden class="cybr-btn__tag">PCLP4</span>
+                </button>
+            </a>
+            <a href="http://localhost:8080/urls">
+            <button class="cybr-btn">
+            |   URLS<span aria-hidden>_</span>
+            |   <span aria-hidden class="cybr-btn__glitch">URLS</span>
+            |   <span aria-hidden class="cybr-btn__tag">PCLP4</span>
+                </button>
+            </a>
+            <a href="http://localhost:8080/delete">
+                <button class="cybr-btn">
+                |   DELETE_USER<span aria-hidden>_</span>
+                |   <span aria-hidden class="cybr-btn__glitch">DELETE_USER</span>
+                |   <span aria-hidden class="cybr-btn__tag">PCLP4</span>
+                </button>
+            </a>
+        </div>
+
+        //button.button1 DutuCalutu!

@@ -1,0 +1,79 @@
+- void css(string file)
+    link(rel= 'stylesheet', type='text/css', href='styles/#{file}.css')
+
+doctype html
+html
+    head
+        <link rel="shortcut icon" href="#">
+        title add_url
+        - css("button");
+
+        :javascript
+            function submitForm(event) {
+                event.preventDefault();
+                const url = "http://localhost:8080/api/v1/add_url";
+                const formData = new FormData(event.target);
+                const data = {};
+                formData.forEach((value, key) => (data[key] = value));
+                console.log(data);
+
+                var nameEQ = userEmail.value + "=";
+                var ca = document.cookie.split(';');
+                var sol;
+                for (var i = 0; i < ca.length; ++i) {
+                    var c = ca[i];
+                    while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+                    if (c.indexOf(nameEQ) == 0) {
+                        sol = c.substring(nameEQ.length, c.length);
+                        break;
+                    }
+                }
+
+                fetch(url, {
+                    method: "POST",
+                    body: JSON.stringify(data),
+                    headers: {
+                        "Content-Type": "application/json",
+                        "AccessToken": sol,
+                        "userEmail": userEmail.value,
+                    },
+                })
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error(response.statusText);
+                    }
+                    return response.json();
+                })
+ 
+                .then((data) => {
+
+                    console.log("Success:", data);
+
+                    window.location.href = "http://localhost:8080/auth";
+                })
+                .catch((error) => {
+                    alert(error.message);
+                    console.error("Error:", error);
+                });
+            }
+
+    body
+
+        <div>
+            <a href="http://localhost:8080/auth">
+                <button class="cybr-btn">
+                |   HOME_AUTH<span aria-hidden>_</span>
+                |   <span aria-hidden class="cybr-btn__glitch">HOME_AUTH</span>
+                |   <span aria-hidden class="cybr-btn__tag">PCLP4</span>
+                </button>
+            </a>
+        </div>
+        
+        <form onsubmit="submitForm(event)">
+        <label for="userEmail">User email:</label><br>
+        <input type="text" id="userEmail" name="userEmail"></br>
+        <label for="urlAddress:">urlAddress:</label><br>
+        <input type="text" name="urlAddress"></br>
+        <input type="submit" value="Submit" class="cybr-btn" aria-hidden class="cybr-btn__glitch" aria-hidden class="cybr-btn__tag"> </form>
+
+        //button.button1 DutuCalutu!

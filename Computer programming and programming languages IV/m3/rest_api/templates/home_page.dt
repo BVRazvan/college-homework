@@ -1,0 +1,27 @@
+- void css(string file)
+    link(rel= 'stylesheet', type='text/css', href='styles/#{file}.css')
+
+doctype html
+html
+    head
+        <link rel="shortcut icon" href="#">
+        title home
+        - css("button");
+    body
+        <div>
+            <a href="http://localhost:8080/register">
+                <button class="cybr-btn">
+                |   REGISTER<span aria-hidden>_</span>
+                |   <span aria-hidden class="cybr-btn__glitch">REGISTER</span>
+                |   <span aria-hidden class="cybr-btn__tag">PCLP4</span>
+                </button>
+            </a>
+            <a href="http://localhost:8080/login">
+                <button class="cybr-btn">
+                |   LOGIN<span aria-hidden>_</span>
+                |   <span aria-hidden class="cybr-btn__glitch">LOGIN</span>
+                |   <span aria-hidden class="cybr-btn__tag">PCLP4</span>
+                </button>
+            </a>
+        </div>
+        //button.button1 DutuCalutu!

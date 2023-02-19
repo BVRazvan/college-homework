@@ -1,0 +1,32 @@
+figure {
+    position: relative;
+    
+    .img-bg {
+      display: block;
+      height: 0;
+      width: 100vw;
+      padding-bottom: 100vh;
+      background: {
+        repeat: no-repeat;
+        size: cover;
+        position: center;
+      }
+    }
+    
+    figcaption {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      max-width: 50%;
+      margin: auto;
+      transform: translateY(-50%);
+      font-size: 4vw;
+      text-align: center;
+      color: white;
+    }
+  }
+  
+  body {
+    font-family: arial, sans-serif;
+  }
