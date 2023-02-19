@@ -1,0 +1,70 @@
+// Bogdan Valentin-Razvan 321CA SO 2022-2023 <bogdanvrazvan@gmail.com>
+
+	Thread Scheduler
+	----------------
+	
+		This project has the purpose to implement a thread scheduler using
+	round-robin algorithm on a single core processor.
+	
+-------------------------------------------------------------------------------
+
+		It is notable to say that threads use mutexes to synchronize their
+	use of a shared resource, moreover conditional variables are introduced
+	in order to allow communication between threads; briefly saying that a
+	thread can announce another thread that it will be introduced into
+	RUNNING state or woken up from WAITING state to READY/RUNNING state.
+		Condtional variable's wait operation is used into while loops in order
+	to avoid spurious wake ups, when threads are woken up by the kernel even if
+	the signal was not raised.
+
+-------------------------------------------------------------------------------
+
+		As there are 5 possible states for a thread (NEW, READY, RUNNING,
+	WAITING, TERMINATED), I decided to create 3 queues:
+		a) 2 "basic" queues, where threads are introduced in cronological order
+	which represent those in WAITING and TERMINATED state;
+		b) 1 "round robin" queue, where READY threads are introduced based on
+	their priority;
+		Furthermore, the NEW threads are immediately introduced in READY
+	queue as it does not make sense to create separate queue for them. Also,
+	as there is just one thread in RUNNING state, I keep a variable in
+	scheduler struct for it.
+
+-------------------------------------------------------------------------------
+
+		During its life span, a thread has the following flow:
+			1. It is introduced into READY queue or RUNNING state depending on
+		his priority. If it is introduce into the queue, it waits for the
+		condition variable to be introduced into RUNNING state.
+		
+			2. Once the thread is signaled that it enters in RUNNING state,
+		it locks a mutex and executes its function.
+		
+			3. The threads keeps executing and it might be switched in the
+		following situations:
+				a) time quantum expires and there is another one with higher
+			priority, moving to READY queue;
+				b) waits for a signal, moving to WAITING queue;
+				c) terminates execution of the function, moving to TERMINATED
+			queue;
+				d) another thread with higher priority from WAITING thread is
+			signaled;
+				e) NEW thread with higher priority is created.
+				
+			***Once the thread is switched, it unlocks the mutex, signals
+			the conditional variable of the new RUNNNIG thread and waits for
+			a signal from its conditional variable meaning returning to 
+			RUNNING state!!!***
+			
+			4. Thread might be switched back to RUNNING state depending on
+		the cases from step (3).
+		
+			5. Steps (3) and (4) cycle.
+			
+			6. Scheduler finishes the execution and the main thread joins o
+		the other threads.
+			
+-------------------------------------------------------------------------------	
+	
+		
+		 

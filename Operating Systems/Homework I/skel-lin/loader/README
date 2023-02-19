@@ -1,0 +1,23 @@
+Bogdan Valentin-Razvan 321CA 2022-2023 <bogdanvrazvan@gmail.com>
+
+--------------------E.L.F Executable Loader------------------------------------
+
+    Project's purpose is to load an ELF executable into virtual space using
+demand paging mechanism.
+    In the beginning, a parse over the executable is required in order to
+define each section(segment). Once finished, executable file has everything it
+needs to run.
+    To provide demand paging mechanism, a handler for SEG_FAULT signal is
+implemented in skel-lin/loader/loader.c file. The handler modifies default
+action of this signal in the following manner:
+        -finds the segment which contains the address raising the signal;
+        -checks if the page raising the signal is not mapped and acts properly;
+        -maps the page causing the signal into virtual address space;
+        -checks if segment's memory size is larger then actual size(e.g. bss)
+and fill with zero inside the page(if it is the case);
+        -loads segment's structure into virtual page.
+    
+-------------------------------------------------------------------------------
+
+Bibliography:
+    1.Michael Kerrisk, "The Linux Programming Interface".
