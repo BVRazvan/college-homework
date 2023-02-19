@@ -1,0 +1,83 @@
+321CA Bogdan Valentin-Razvan 2022-2023 Tema2 AA <bogdanvrazvan@gmail.com>
+
+--------------------------------------------------------------------------------
+    Trial
+    -----
+    Initial, am folosit un hash si pentru fiecare pachet, mai exact o masca
+masca pe biti in care al i-lea bit este setat daca se afla a i-a carte in
+pachetul actual. Ulterior, am marcat pachetele care reprezentau o submultime
+din alte pachete pe baza hash-ului facut.
+    In plus, am folosit sume partiale pentru a retine pentru fiecare pachet,
+cate pachete din stanga lui au fost sterse, cu scopul de a adauga variabilele in CNF
+numere consecutive, aceasta operatie fiind considerata tot un fel de hash.
+    In final, am construit cate o clauza pentru fiecare carte, in care apar
+toate pachetele care o contin, si am afisat raspunsul oferit de oracol.
+
+    Complexitate de timp: O(n * m + m * m)
+        - n = numarul de elemente in multime
+        - m = numarul de submultimi
+        - p = numarul de submultimi dorit
+
+    Complexitate de spatiu: O(n * m)
+        - n = numarul de elemente in multime
+        - m = numarul de submultimi
+        - p = numarul de submultimi dorit
+
+--------------------------------------------------------------------------------
+
+    Rise
+    ----
+
+    Initial, am hash-uit numele card-urilor in numere intregi pentru a opera
+mai usor cu ele, de mentionat ca am ignorat toate cartile nedorite si cele
+dorite, dar deja achizitionate.
+    De asemenea, am folosit un hash si pentru fiecare pachet, mai exact o masca
+masca pe biti in care al i-lea bit este setat daca se afla a i-a carte in
+pachetul actual. Ulterior, am marcat pachetele care reprezentau o submultime
+din alte pachete pe baza hash-ului facut. In plus, am folosit sume partiale
+pentru a retine pentru fiecare pachet, cate pachete din stanga lui au fost
+sterse, cu scopul de a adauga variabilele in CNF numere consecutive, aceasta
+operatie fiind considerata tot un fel de hash.
+    In final, am construit cate o clauza pentru fiecare carte, in care apar
+toate pachetele care o contin, si am afisat raspunsul oferit de oracol.
+
+    Complexitate de timp: O(p^2 * log m + m * p * log m + n * log m)
+        - n = numarul de carti achizitionate initial;
+        - m = numarul de carti dorite;
+        - p = numarul de pachete de pot fi achitionate.
+
+    Complexitate de spatiu: O(m * p)
+        -m = numarul de carti dorite;
+        -p = numarul de pachete ce pot fi achizionate.
+
+--------------------------------------------------------------------------------
+
+    Redemption
+    ----------
+
+    Initial, am hash-uit numele card-urilor in numere intregi pentru a opera
+mai usor cu ele, de mentionat ca am ignorat toate cartile nedorite si cele
+dorite, dar deja achizitionate, iar in niciun pachet nu am adaugat dubluri.
+    Pentru a construi solutia am folosit metoda greedy. In prima faza, am
+adaugat la solutie pachetele in care se afla carti care apar doar in locul
+respectiv. Ulterior, am folosit o coada de prioritati pentru a alege pachetul
+care contine cele mai multe carti dorite. Dupa fiecare alegere a unui nou
+pachet se reparcurg toate pachetele si se actualizeaza numarul de carti dorite
+si neobtinute.
+
+    Complexitate de timp: O(n * log m + m^2 * p^2 * log^2 m)
+        - n = numarul de carti achizitionate initial;
+        - m = numarul de carti dorite;
+        - p = numarul de pachete de pot fi achitionate.
+    
+    Complexitate de spatiu: O(m * p)
+        - m = numarul de carti dorite;
+        - p = numarul de pachete de pot fi achitionate.
+
+--------------------------------------------------------------------------------
+
+    Foarte interesanta tema, total diferita de toate temele tractor din acest
+semestru, care nu au fost deloc putine.
+    Din nefericire, este ultima mea tema pe semestrul asta si cred ca oboseala
+si-a pus amprenta in oarecare masura.
+

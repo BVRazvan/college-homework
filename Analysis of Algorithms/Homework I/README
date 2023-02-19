@@ -1,0 +1,17 @@
+Bogdan Valentin-Razvan 321CA Tema1 AA 2022-2023 <bogdanvrazvan@gmail.com>
+
+|==> 19.pdf - documentul in care este analizata problema rucsacului;
+|==> backtracking_rucsac.cpp - implementeaza solutia folosind backtracking
+|   (run-p1);
+|==> dp_rucsac.cpp - implementeaza solutia folosind programare dinamica
+|   (run-p2);
+|==> greedy_rucsac.cpp - implementeaza solutia folosind greedy (run-p3);
+|==> dp_spatiu_liniar_rucsac.cpp - implementeaza solutia folosind programare
+|    dinamica fara a reconstitui submultimea solutie (run-p4);
+|==> Makefile - utilizat pentru executarea algoritmilor conform detaliilor impuse;
+|==> in - director ce contine datele de intrare;
+|==> out - director ce contine datele corespondente celor de intrare
+|   (format: testX.outY - rezultatul testului de intrare testX.in, rulat de
+|   algoritmul din comanda run-pY);
+|==> generator_teste.cpp - genereaza teste de intrare.
+|==> ID test competitie: 81
