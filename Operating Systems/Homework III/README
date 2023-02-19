@@ -1,0 +1,46 @@
+Bogdan Valentin-Razvan 321CA 3rd Homework OS 2022-2023 <bogdanvrazvan@gmail.com>
+
+		Asynchronous Web Server
+		----------------------
+		
+	This project has the purpose to implement a functional asynchronous
+web server using nonblocking and asynchronous IO.
+
+-------------------------------------------------------------------------------
+
+	Server communicates with the clients using sockets. Initially, the
+server creates a listening socket using TCP on port 8888 and waits for
+connections using epoll for multiplexing; once a client sends a request it is
+triggered by epoll and a connection handler is created.
+
+-------------------------------------------------------------------------------
+
+	Normally, the client sends a HTTP message which is parsed for getting
+the path to a file whose content has to be send as answer by the server; here
+three situations appear:
+		-file lies in "dynamic" directory which involves copying file's
+	contents beforehand into buffers of given size. These IO operations
+	are done using asynchronous IO. For every file in this case, an
+	io_context is created and iocb structures are initiliazed which are
+	later added attached to an event file descriptor. Once this file
+	descriptor is added to epoll, triggers will raise and, based on order,
+	each buffer is sent as an answer.
+		*data journey: DISK -> RAM BUFFERS -> SOCKET -> CLIENT*
+		
+		-file lies in "static" directory which involves sending file's
+	contents directly to the user using "sendfile" function.
+		*data journey: DISK -> SOCKET -> CLIENT*
+		
+		-file does not exist in either of these directories.
+		
+-------------------------------------------------------------------------------
+
+	Before sending the actual data, an HTTP header is sent based on the
+cases explained earlier.
+
+-------------------------------------------------------------------------------
+
+	Bibliography:
+1. Michael Kerrisk, "The Linux Programming Interface"
+2. "ocw.cs.pub.ro/courses/so/laboratoare/laborator-11"
+3. "github.com/littledan/linux-aio"
