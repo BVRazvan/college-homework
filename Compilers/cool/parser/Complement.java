@@ -1,0 +1,20 @@
+package cool.parser;
+
+import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.Token;
+
+public class Complement extends Expression {
+    Expression expression;
+    Complement(Expression expression,
+               Token token,
+               ParserRuleContext parserContext) {
+        super(token, parserContext);
+        this.expression = expression;
+    }
+
+    public Expression getExpression() {
+        return expression;
+    }
+
+    public <T> T accept(ASTVisitor<T> visitor) { return visitor.visit(this); }
+}

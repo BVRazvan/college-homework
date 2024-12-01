@@ -1,0 +1,83 @@
+// Bogdan Valentin-Razvan 331CA Tema 3 APD 2023-2024 <bogdanvrazvan@gmail.com>
+
+	Protocolul BitTorrent
+	---------------------
+	
+	In aceasta tema, am implementat protocolul BitTorrent pentru a incarca/descarca
+fisiere intre clienti, traficul fiind influentati de un tracker care primeste
+regulat actualizari de la fiecare client.
+
+	Comunicarea client(download_thread) -> tracker
+	----------------------------------------------
+	
+	Initial, fiecare client isi "citeste" fisierele detinute din input si asteapta
+ca si restul sa faca acest lucru pentru a incepe descarcarea/incarcarea de
+fisiere, la semnul tracker-ului.
+	Ulterior, la fiecare 10 segmente primite, clientul ii actualizeaza datele
+detinute de catre tracker ale acestuia, prin trimiterea DOAR a noilor segmente
+descarcate, marcate printr-o variabila booleana("is_tracked").
+
+	Din motive de eficienta, am decis ca tracker-ul sa primeasca de la client doar
+numele fisierului si index-ul segmentului primit, astfel incat in tracker mentin
+pentru fiecare segment al fiecarui fisier care dintre clientii il detin. Astfel,
+inainte de fiecare incercare de a descarca un segment, un client ii cere tracker-ului
+cel mai indicat client(voi explica ce inseamna la comnunicarea inversa) pentru a
+descarca respectivul segment pentru evita cat mai des posibil blocarii apelurilor
+de mpi_send / mpi_recv.
+
+	Odata ce gaseste un client disponibil de comunicare, are loc transferul, iar
+ulterior notifica tracker-ul din nou pentru a actualiza disponibilitatea clientului
+cu care a facut transferul.
+
+	In plus, dupa descarcarea ultimului fisier, isi inchide thread-ul de download si
+anunta tracker-ul.
+
+	Comunicarea tracker -> client(download_thread)
+	---------------------------------------------
+	
+	Initial, tracker-ul primeste fisierele de baza ale clientilor, iar dupa
+primirea datelor de la ultimul dintre acestea, le da voie printr-un semnal sa
+inceapa descarcarea/incarcarea de fisiere.
+	
+	In momentul cand un client doreste sa descarce un segment, acesta se
+"sfatuieste" cu tracker-ul. Mai exact, in tracker se retine un vector
+cu disponibilitatea fiecarui client(upload_thread) de a transmite segmente,
+astfel tracker-ul va itera prin clientii ce detin segmentul dorit si va
+returna unul care este disponibil de comunicare. Exista cazuri in care toti
+clientii sunt ocupati, astfel ca procesul se va repeta (mesaj de la client ->
+cautare in structura tracker-ului -> raspuns (pozitiv/negativ)). Daca raspunsul
+inapoi catre client este unul pozitiv (a gasit un client disponibil) se asteapta
+o notificare de la acesta pentru a actualiza disponibilitatea clientului cu care
+a comunicat(client upload_thread).
+
+	Dupa ce un client reuseste sa descarce 10 segmente va trimite o actualizare,
+mai exact segmentele de care a facut rost. Astfel, se va actualiza structura
+care contine clientii detinatori de segmente.
+
+	La un moment dat, clientii vor anunta ca au terminat de descarcat un anume fisier
+pentru a actualiza rolul acestora referitor la un fisier. Iar ulterior, finalizarea
+descarcarii tuturor fisierelor, tracker-ul incrementand o variabila ce, ajungand sa fie
+egala cu numarul clientilor, va determina finalizarea executiei programului MPI.
+
+	Comunicarea client(download_thread) -> client(upload_thread)
+	------------------------------------------------------------
+	
+	Odata obtinut un client disponibil de transfer, clientul(d_thr) ii trimite
+celuilalt client(u_thr) fisierul si index-ul dorit.
+
+	Comunicarea client(upload_thread) -> client(download_thread)
+	------------------------------------------------------------
+	
+	Clientul(u_thr) primeste numele fisierului si index-ul segmentului dorit
+si, iterand prin fisierele detinute, raspunde cu hash-ul respectiv.s
+
+	Comunicarea tracker -> client(upload_thread)
+	--------------------------------------------
+	
+	Tracker-ul, odata informat ca toti clientii au terminat de descarcat
+fisierele dorite, trimite tuturor clientilor(u_thr) mesajul de terminare.
+
+	
+	
+
+	
